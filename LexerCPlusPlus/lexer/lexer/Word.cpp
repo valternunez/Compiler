@@ -9,7 +9,7 @@ class Word : Token {
 
   public:
     Word(string lexeme, int tag) {
-      super(tag);
+      this->tag = tag;
       this->lexeme = lexeme;
     }
     string getLexeme(){

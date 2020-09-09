@@ -6,7 +6,7 @@ class Real : Token {
     float value;
   public:
     Real(float value){
-      super(Tag.REAL);
+      this->tag = Tag.REAL
       this->value = value;
     }
     float getValue(){

@@ -6,7 +6,7 @@ class Integer : Token {
     int value;
   public:
     Integer(int value){
-      super(Tag.INTEGER);
+      this->tag = Tag.INTEGER
       this->value = value;
     }
     int getValue(){

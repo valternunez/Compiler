@@ -13,7 +13,7 @@ class CharacterString : Token {
   public:
     //Setter
     CharacterString(String value){
-      super(Tag.CHARACTERSTRING);  //que vergas hace esta linea?
+      this->tag = Tag.CHARACTERSTRING  //que vergas hace esta linea?
       this->value = value;
     }
     //Getter
