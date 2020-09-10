@@ -1,4 +1,6 @@
 #Valter Nunez - A01206138
+# lexer
+
 
 #CharacterString class
 class CharacterString(Token):
@@ -10,7 +12,7 @@ class CharacterString(Token):
         return self.value
 
     def toString(self):
-        return "STRING - VALUE" + str(value)
+        return "STRING - VALUE" + str(self.value)
 
 #Integer Class
 class Integer(Token):
@@ -22,7 +24,7 @@ class Integer(Token):
         return self.value
 
     def toString(self):
-        return "INTEGER - VALUE" + str(value)
+        return "INTEGER - VALUE" + str(self.value)
 #Real class
 class Real(Token):
     def __init__(self, value):
@@ -33,7 +35,7 @@ class Real(Token):
         return self.value
 
     def toString(self):
-        return "REAL - VALUE" + str(value)
+        return "REAL - VALUE" + str(self.value)
 
 #Tag Class
 class Tag:
@@ -81,48 +83,12 @@ class Tag:
 class Token:
     def __init__(self, tag):
         this.tag = tag
-
+    #Getter
     def getToken(self):
-        return str(tag)
+        return self.tag
 
-    def toString():  #QUE SWITCHEE EL tag
-        switcher = {
-            Tag.PROGRAM:"PROGRAM",
-            Tag.CONSTANT: "CONSTANT",
-            Tag.VAR: "VAR",
-            Tag.BEGIN: "BEGIN",
-            Tag.END: "END",
-            Tag.INTEGER: "INTEGER",
-            Tag.REAL: "REAL",
-            Tag.BOOLEAN: "BOOLEAN",
-            Tag.STRING: "STRING",
-            Tag.WRITELN: "WRITELN",
-            Tag.READLN: "READLN",
-            Tag.WHILE: "WHILE",
-            Tag.DO: "DO",
-            Tag.REPEAT: "REPEAT",
-            Tag.UNTIL: "UNTIL",
-            Tag.FOR: "FOR",
-            Tag.TO: "TO",
-            Tag.DOWNTO: "DOWNTO",
-            Tag.IF: "IF",
-            Tag.THEN: "THEN",
-            Tag.ELSE: "ELSE",
-            Tag.NOT: "NOT",
-            Tag.DIV: "DIV",
-            Tag.MOD: "MOD",
-            Tag.AND: "AND",
-            Tag.OR: "OR",
-            Tag.EQ: "EQ",
-            Tag.NEQ: "NEQ",
-            Tag.LE: "LE",
-            Tag.GE: "GE",
-            Tag.MINUS: "MINUS",
-            Tag.ASSIGN: "ASSIGN",
-            Tag.ID: "ID",
-            Tag.EOF: "EOF",
-        }
-        return switcher.get(tag, "" + tag)
+    def toString():
+        return "TOKEN - VALUE = " + str(self.tag)
 
 #Word Class
 class Word(Token):
@@ -147,21 +113,24 @@ class Word(Token):
 #InputFile Class
 class InputFile:
     def __init__ InputFile(self, filename):
-        self.file = open (filename, "r")
+        self.file = open(filename, "r")
         self.data = []
         self.position = 0
+        self.size = 0
         self.lineNumber = 1
         self.columnNumber = 1
-        self.noLines = 0
+        aux = self.file.read()
+        self.lines = 0
+        for ch in aux:
+            self.size += 1
+            if ch == "\n":
+                self.lines += 1
+            self.data.append(ch)
 
-        for x in self.file.read():
-            if (ch == "\n"):
-                self.noLines += 1
-            self.data.append(x)
 
     def getChar(self):
-        self.pos += 1
-        c = self.data[self.pos]
+        self.position += 1
+        c = self.data[self.position]
         if c == "\n":
             self.columnNumber = 1
             self.lineNumber += 1
@@ -169,14 +138,24 @@ class InputFile:
             self.columnNumber += 1
         return c
 
+    def peekChar(self):
+        return self.data[self.position]
+
+
+    def isE0F(self):
+        if self.lineNumber == self.lines:
+            return True
+        else:
+            return False
+
 
 
 
 #Lexer Class
 class Lexer:
-    words = {}
-    peek = ""
     def __init__(self):
+        self.words = {}
+        addToDic(prewords, self.words)
         reserve(Word("program", Tag.PROGRAM), self.words)
         reserve(Word("constant", Tag.CONSTANT), self.words)
         reserve(Word("var", Tag.VAR), self.words)
@@ -201,9 +180,16 @@ class Lexer:
         reserve(Word("mod", Tag.MOD), self.words)
         reserve(Word("and", Tag.AND), self.words)
         reserve(Word("or", Tag.OR), self.words)
-        file = open(filename, "r")
+        self.file = InputFile(filename)
+        self.peek = ""
+        pass
 
-    def reserve(w):
+    def addToDic(dictionary, words):
+        for i in dictionary:
+            reserve(i, words)
+        pass
+
+    def reserve(w, words):
         words[w.lexeme] = w
 
     def isReserved (self, key):
@@ -250,3 +236,54 @@ class Lexer:
         if self.peek == "(":
             if readch("*"):
                 readch()
+                return readComments()
+            else
+                return Token("(")
+
+        elif self.peek == "<":
+            if self.readch("="):
+                return self.isReserved("<=")
+            elif self.peek == ">":
+                return self.isReserved("<>")
+            else:
+                return Token("<")
+
+        elif self.peek == ">":
+            if self.readch("="):
+                return self.isReserved(">=")
+            else:
+                return Token(">")
+
+        elif self.peek == "=":
+            if self.readch("="):
+                return self.isReserved("==")
+            else:
+                return Token("=")
+
+        elif self.peek == ":":
+            if self.readch("="):
+                return self.isReserved(":=")
+            else:
+                return Token(":")
+
+        elif self.peek == '"':
+                return self.readCharacterString()
+
+
+        if self.peek.isdigit():
+            v = ""
+            v += str(self.peek)
+            self.readch()
+            while self.peek.isdigit():
+                v += str(self.peek)
+                self.readCh()
+            if self.peek != ".":
+                return Integer(int(v))
+
+            v += str(self.peek)
+            while True:
+                self.readch()
+                if self.peek.isdigit() == False:
+                    break
+                v += str(self.peek)
+            return Real(float(v))
