@@ -100,7 +100,7 @@ class Word(Token):
 
     eq = Word("==", Tag.EQ)
     ne = Word( "<>", Tag.NEQ )
-	le= Word( "<=", Tag.LE  )
+	le = Word( "<=", Tag.LE  )
     ge = Word( ">=", Tag.GE )
 	minus = Word( "minus", Tag.MINUS )
 	assign = Word( ":=", Tag.ASSIGN )
@@ -287,3 +287,10 @@ class Lexer:
                     break
                 v += str(self.peek)
             return Real(float(v))
+
+        if self.peek.isalpha():
+            b = self.peek
+            b.lower()
+            self.readch()
+            while self.peek.isalpha():
+                
