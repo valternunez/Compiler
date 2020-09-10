@@ -1,3 +1,1 @@
-==  pal   "Esto es un string" 123 123.32
-(* ESTO ES UN COMENTARIO *) ==  >= 6
-f as df
+==  <> 12.4 if for "perritos cantantes" puto pendejo 666 = <
