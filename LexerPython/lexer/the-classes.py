@@ -6,21 +6,21 @@ class CharacterString(Token):
         self.tag = Tag.CHARACTERSTRING
         self.value = value
     def __str__(self):
-        return str(value)
+        return "STRING - VALUE" + str(value)
 
 class Integer(Token):
     def __init__(self, value):
         self.tag = Tag.INTEGER
         self.value = value
     def __str__(self):
-        return str(value)
+        return "INTEGER - VALUE" + str(value)
 
 class Real(Token):
     def __init__(self, value):
         self.tag = Tag.REAL
         self.value = value
     def __str__(self):
-        return str(value)
+        return "REAL - VALUE" + str(value)
 
 class Tag:
     EOF = 66666
@@ -105,3 +105,63 @@ class Token:
             Tag.EOF: "EOF",
         }
         return switcher.get(tag, "" + tag)
+
+class Word(Token):
+    def __init__(self, lexeme, tag):
+        self.tag = tag
+        self.lexeme = lexeme
+    def __str__(self):
+        return str(lexeme)
+
+    eq = Word("==", Tag.EQ)
+    ne = Word( "<>", Tag.NEQ )
+	le= Word( "<=", Tag.LE  )
+    ge = Word( ">=", Tag.GE )
+	minus = Word( "minus", Tag.MINUS )
+	assing = Word( ":=", Tag.ASSIGN )
+	true = Word( "true",  Tag.TRUE  )
+	false = Word( "false", Tag.FALSE )
+
+class InputFile:
+    def __init__ InputFile(self, filename):
+        we = 1
+
+class Lexer:
+    words = {}
+    peek = ""
+    filename =
+    def __init__(self):
+        reserve(Word("program", Tag.PROGRAM), self.words)
+        reserve(Word("constant", Tag.CONSTANT), self.words)
+        reserve(Word("var", Tag.VAR), self.words)
+        reserve(Word("begin", Tag.BEGIN), self.words)
+        reserve(Word("end", Tag.END), self.words)
+        reserve(Word("integer", Tag.INTEGER), self.words)
+        reserve(Word("real", Tag.REAL), self.words)
+        reserve(Word("string", Tag.STRING), self.words)
+        reserve(Word("readln", Tag.READLN), self.words)
+        reserve(Word("while", Tag.WHILE), self.words)
+        reserve(Word("do", Tag.DO), self.words)
+        reserve(Word("repeat", Tag.REPEAT), self.words)
+        reserve(Word("until", Tag.UNTIL), self.words)
+        reserve(Word("for", Tag.FOR), self.words)
+        reserve(Word("to", Tag.TO), self.words)
+        reserve(Word("downto", Tag.DOWNTO), self.words)
+        reserve(Word("if", Tag.IF), self.words)
+        reserve(Word("then", Tag.THEN), self.words)
+        reserve(Word("else", Tag.ELSE), self.words)
+        reserve(Word("not", Tag.NOT), self.words)
+        reserve(Word("div", Tag.DIV), self.words)
+        reserve(Word("mod", Tag.MOD), self.words)
+        reserve(Word("and", Tag.AND), self.words)
+        reserve(Word("or", Tag.OR), self.words)
+        file = open(filename, "r")
+
+    def reserve(w):
+        words[w.lexeme] = w
+
+    def skip_spaces(peek):
+
+
+    def scan():
+        input.replace(" ", "")
