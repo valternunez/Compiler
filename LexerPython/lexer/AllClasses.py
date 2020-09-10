@@ -305,6 +305,16 @@ class Lexer:
         if self.peek.isalpha():
             b = self.peek
             self.readch()
+            while self.peek.isalpha():
+                b += self.peek
+                self.readch()
+            s = str(b)
+            w = words.get(s)
+            if w != None:
+                return w
+            w = Word(s, Tag.ID)
+            reserve(w, self.words)
+            return w
 
 
         #Ending
