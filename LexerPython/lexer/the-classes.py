@@ -1,4 +1,4 @@
-
+#Valter Nunez - A01206138
 
 #CharacterString class
 class CharacterString(Token):
@@ -144,7 +144,30 @@ class Word(Token):
 #InputFile Class
 class InputFile:
     def __init__ InputFile(self, filename):
-        we = 1
+        self.file = open (filename, "r")
+        self.data = []
+        self.position = 0
+        self.lineNumber = 1
+        self.columnNumber = 1
+        self.noLines = 0
+
+        for x in self.file.read():
+            if (ch == "\n"):
+                self.noLines += 1
+            self.data.append(x)
+
+    def getChar(self):
+        self.pos += 1
+        c = self.data[self.pos]
+        if c == "\n":
+            self.columnNumber = 1
+            self.lineNumber += 1
+        else:
+            self.columnNumber += 1
+        return c
+
+
+
 
 #Lexer Class
 class Lexer:
