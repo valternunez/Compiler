@@ -74,15 +74,18 @@ class Tag:
     MINUS = 289
     ID = 290
     CHARACTERSTRING = 291
+    COMMENTS = 292
     ERROR = 293;
 
 #Token Class
 class Token:
     def __init__(self, tag):
         this.tag = tag
-    def __str__(self):
+
+    def getToken(self):
         return str(tag)
-    def paString():  #QUE SWITCHEE EL tag
+
+    def toString():  #QUE SWITCHEE EL tag
         switcher = {
             Tag.PROGRAM:"PROGRAM",
             Tag.CONSTANT: "CONSTANT",
@@ -210,28 +213,40 @@ class Lexer:
     def readch(self):
         self.peek = self.file.getChar()
 
-    def checkReadChar(self, c):
-        readCh()
+    def readch(c):
+        readch()
         if self.peek != c:
             return False
-        else
-            return True
+        return True
 
     def skipWhiteSpaces():
-        self.peek = self.file.peekChar
+        self.peek = self.file.peekChar()
+        while self.peek.isspace():
+            self.peek = self.file.getChar()
+
+    def readCharacterString(self):
+        cs = "" + self.peek
+        self.peek = self.file.getChar()
+        while self.peek != '"' :
+            cs += self.peek
+            self.peek = self.file.getChar()
+        cs += self.peek
+        readch()
+        return CharacterString(cs)
 
     def readComments(self):
-        prev = self.file.pos
-        curr = self.file.pos + 1
-
-        while x < self.file.size and self.file.data[prev]
-            prev = curr
-            curr += 1
-        self.file.pos = curr + 1
+        prev = self.file.position
+        current = self.file.position + 1
+        while current < self.file.size and self.file.data[prev] != "*" and self.file.data[current] != ")":
+            prev = current
+            current += 1
+        self.file.position = current + 1
         return Token(Tag.COMMENTS)
 
 
     def scan():
         skipWhiteSpaces()
 
-        
+        if self.peek == "(":
+            if readch("*"):
+                readch()
