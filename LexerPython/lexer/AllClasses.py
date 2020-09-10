@@ -1,6 +1,14 @@
 #Valter Nunez - A01206138
-# lexer
+#Token Class
+class Token:
+    def __init__(self, tag):
+        self.tag = tag
+    #Getter
+    def getToken(self):
+        return self.tag
 
+    def toString(self):
+        return "TOKEN - VALUE = " + str(self.tag)
 
 #CharacterString class
 class CharacterString(Token):
@@ -79,40 +87,35 @@ class Tag:
     COMMENTS = 292
     ERROR = 293;
 
-#Token Class
-class Token:
-    def __init__(self, tag):
-        this.tag = tag
-    #Getter
-    def getToken(self):
-        return self.tag
 
-    def toString():
-        return "TOKEN - VALUE = " + str(self.tag)
 
 #Word Class
 class Word(Token):
     def __init__(self, lexeme, tag):
-        self.tag = tag
+        super().__init__(tag)
         self.lexeme = lexeme
-    def __str__(self):
-        return str(lexeme)
 
-    eq = Word("==", Tag.EQ)
-    ne = Word( "<>", Tag.NEQ )
-	le = Word( "<=", Tag.LE  )
-    ge = Word( ">=", Tag.GE )
-	minus = Word( "minus", Tag.MINUS )
-	assign = Word( ":=", Tag.ASSIGN )
-	true = Word( "true",  Tag.TRUE  )
-	false = Word( "false", Tag.FALSE )
+    def getLexeme(self):
+        return str(self.lexeme)
 
-    words_list[eq, ne, le, ge, minus, assign, true, false]
+    def toString(self):
+        return "WORD - LEXEME = " + self.lexeme
+
+eq = Word("==", Tag.EQ)
+ne = Word("<>", Tag.NEQ)
+le = Word("<=", Tag.LE)
+ge = Word(">=", Tag.GE)
+minus = Word("minus", Tag.MINUS)
+assign = Word(":=", Tag.ASSIGN)
+true = Word("true", Tag.TRUE)
+false = Word("false", Tag.FALSE)
+
+words_list = [eq, ne, le, ge, minus, assign, true, false]
 
 
 #InputFile Class
 class InputFile:
-    def __init__ InputFile(self, filename):
+    def __init__(self, filename):
         self.file = open(filename, "r")
         self.data = []
         self.position = 0
@@ -130,7 +133,7 @@ class InputFile:
 
     def getChar(self):
         self.position += 1
-        c = self.data[self.position]
+        c = self.data[self.position ]
         if c == "\n":
             self.columnNumber = 1
             self.lineNumber += 1
@@ -148,14 +151,10 @@ class InputFile:
         else:
             return False
 
-
-
-
-#Lexer Class
 class Lexer:
-    def __init__(self):
+    def __init__(self, filename):
         self.words = {}
-        addToDic(prewords, self.words)
+        addToDic(words_list, self.words)
         reserve(Word("program", Tag.PROGRAM), self.words)
         reserve(Word("constant", Tag.CONSTANT), self.words)
         reserve(Word("var", Tag.VAR), self.words)
@@ -184,28 +183,24 @@ class Lexer:
         self.peek = ""
         pass
 
-    def addToDic(dictionary, words):
-        for i in dictionary:
-            reserve(i, words)
-        pass
 
-    def reserve(w, words):
-        words[w.lexeme] = w
 
     def isReserved (self, key):
-        if key in self.word:
+        if key in self.words:
             pass
 
     def readch(self):
         self.peek = self.file.getChar()
 
-    def readch(c):
-        readch()
+    def readch2(self, c):
+        self.readch()
         if self.peek != c:
+            self.file.position += 1
             return False
+        self.file.position += 1
         return True
 
-    def skipWhiteSpaces():
+    def skipWhiteSpaces(self):
         self.peek = self.file.peekChar()
         while self.peek.isspace():
             self.peek = self.file.getChar()
@@ -230,18 +225,18 @@ class Lexer:
         return Token(Tag.COMMENTS)
 
 
-    def scan():
-        skipWhiteSpaces()
+    def scan(self):
+        self.skipWhiteSpaces()
 
         if self.peek == "(":
-            if readch("*"):
+            if readch2("*"):
                 readch()
                 return readComments()
-            else
+            else:
                 return Token("(")
 
         elif self.peek == "<":
-            if self.readch("="):
+            if self.readch2("="):
                 return self.isReserved("<=")
             elif self.peek == ">":
                 return self.isReserved("<>")
@@ -249,19 +244,19 @@ class Lexer:
                 return Token("<")
 
         elif self.peek == ">":
-            if self.readch("="):
+            if self.readch2("="):
                 return self.isReserved(">=")
             else:
                 return Token(">")
 
         elif self.peek == "=":
-            if self.readch("="):
+            if self.readch2("="):
                 return self.isReserved("==")
             else:
                 return Token("=")
 
         elif self.peek == ":":
-            if self.readch("="):
+            if self.readch2("="):
                 return self.isReserved(":=")
             else:
                 return Token(":")
@@ -269,28 +264,9 @@ class Lexer:
         elif self.peek == '"':
                 return self.readCharacterString()
 
-
-        if self.peek.isdigit():
-            v = ""
-            v += str(self.peek)
-            self.readch()
-            while self.peek.isdigit():
-                v += str(self.peek)
-                self.readCh()
-            if self.peek != ".":
-                return Integer(int(v))
-
-            v += str(self.peek)
-            while True:
-                self.readch()
-                if self.peek.isdigit() == False:
-                    break
-                v += str(self.peek)
-            return Real(float(v))
-
-        if self.peek.isalpha():
-            b = self.peek
-            b.lower()
-            self.readch()
-            while self.peek.isalpha():
-                
+def addToDic(dictionary, words):
+    for i in dictionary:
+        reserve(i, words)
+    pass
+def reserve(w, words):
+    words[w.lexeme] = w
