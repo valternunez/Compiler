@@ -203,8 +203,35 @@ class Lexer:
     def reserve(w):
         words[w.lexeme] = w
 
-    def skip_spaces(peek):
+    def isReserved (self, key):
+        if key in self.word:
+            pass
+
+    def readch(self):
+        self.peek = self.file.getChar()
+
+    def checkReadChar(self, c):
+        readCh()
+        if self.peek != c:
+            return False
+        else
+            return True
+
+    def skipWhiteSpaces():
+        self.peek = self.file.peekChar
+
+    def readComments(self):
+        prev = self.file.pos
+        curr = self.file.pos + 1
+
+        while x < self.file.size and self.file.data[prev]
+            prev = curr
+            curr += 1
+        self.file.pos = curr + 1
+        return Token(Tag.COMMENTS)
 
 
     def scan():
-        input.replace(" ", "")
+        skipWhiteSpaces()
+
+        
