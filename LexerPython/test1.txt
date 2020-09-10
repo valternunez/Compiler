@@ -1,0 +1,3 @@
+==  pal   "Esto es un string" 123 123.32
+(* ESTO ES UN COMENTARIO *) ==  >= 6
+f as df
