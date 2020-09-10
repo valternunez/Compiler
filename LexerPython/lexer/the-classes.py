@@ -1,27 +1,41 @@
 
 
-
+#CharacterString class
 class CharacterString(Token):
     def __init__(self, value):
-        self.tag = Tag.CHARACTERSTRING
+        super().__init__(Tag.CHARACTERSTRING)
         self.value = value
-    def __str__(self):
+    #Getter
+    def getValue(self):
+        return self.value
+
+    def toString(self):
         return "STRING - VALUE" + str(value)
 
+#Integer Class
 class Integer(Token):
     def __init__(self, value):
-        self.tag = Tag.INTEGER
+        super().__init___(Tag.INTEGER)
         self.value = value
-    def __str__(self):
-        return "INTEGER - VALUE" + str(value)
+    #Getter
+    def getValue(self):
+        return self.value
 
+    def toString(self):
+        return "INTEGER - VALUE" + str(value)
+#Real class
 class Real(Token):
     def __init__(self, value):
-        self.tag = Tag.REAL
+        super().__init__(Tag.REAL)
         self.value = value
-    def __str__(self):
+    #Getter
+    def getValue(self):
+        return self.value
+
+    def toString(self):
         return "REAL - VALUE" + str(value)
 
+#Tag Class
 class Tag:
     EOF = 66666
     PROGRAM = 256
@@ -62,6 +76,7 @@ class Tag:
     CHARACTERSTRING = 291
     ERROR = 293;
 
+#Token Class
 class Token:
     def __init__(self, tag):
         this.tag = tag
@@ -106,6 +121,7 @@ class Token:
         }
         return switcher.get(tag, "" + tag)
 
+#Word Class
 class Word(Token):
     def __init__(self, lexeme, tag):
         self.tag = tag
@@ -118,18 +134,22 @@ class Word(Token):
 	le= Word( "<=", Tag.LE  )
     ge = Word( ">=", Tag.GE )
 	minus = Word( "minus", Tag.MINUS )
-	assing = Word( ":=", Tag.ASSIGN )
+	assign = Word( ":=", Tag.ASSIGN )
 	true = Word( "true",  Tag.TRUE  )
 	false = Word( "false", Tag.FALSE )
 
+    words_list[eq, ne, le, ge, minus, assign, true, false]
+
+
+#InputFile Class
 class InputFile:
     def __init__ InputFile(self, filename):
         we = 1
 
+#Lexer Class
 class Lexer:
     words = {}
     peek = ""
-    filename =
     def __init__(self):
         reserve(Word("program", Tag.PROGRAM), self.words)
         reserve(Word("constant", Tag.CONSTANT), self.words)
