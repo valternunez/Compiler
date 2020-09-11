@@ -111,8 +111,6 @@ assign = Word(":=", Tag.ASSIGN)
 true = Word("true", Tag.TRUE)
 false = Word("false", Tag.FALSE)
 
-words_list = [eq, ne, le, ge, minus, assign, true, false]
-
 
 #InputFile Class
 class InputFile:
@@ -156,7 +154,14 @@ class Lexer:
     def __init__(self, filename):
         self.file = InputFile(filename)
         self.words = {}
-        addToDic(words_list, self.words)
+        reserve(eq, self.words)
+        reserve(ne, self.words)
+        reserve(le, self.words)
+        reserve(ge, self.words)
+        reserve(minus, self.words)
+        reserve(assign, self.words)
+        reserve(true, self.words)
+        reserve(false, self.words)
         reserve(Word("program", Tag.PROGRAM), self.words)
         reserve(Word("constant", Tag.CONSTANT), self.words)
         reserve(Word("var", Tag.VAR), self.words)
@@ -182,6 +187,7 @@ class Lexer:
         reserve(Word("and", Tag.AND), self.words)
         reserve(Word("or", Tag.OR), self.words)
         self.peek = ""
+        self.active = True
         pass
 
 
@@ -194,7 +200,6 @@ class Lexer:
     #Reserve function (add stuff to dictionary)
     def reserve2(self,key):
         if key in self.words:return self.words[key]
-
 
     def readch(self):
         self.peek = self.file.getChar()
@@ -213,38 +218,39 @@ class Lexer:
         while self.peek.isspace():
             self.peek = self.file.getChar()
 
-
+    #Detect and read my beloved strings
     def readCharacterString(self):
         cs = "" + self.peek
-        self.peek = self.file.getChar()
+        self.readch()
         while self.peek != '"' :
             cs += self.peek
-            self.peek = self.file.getChar()
+            self.readch()
         cs += self.peek
         self.readch()
         return CharacterString(cs)
 
     #Check the comments
     def readComments(self):
-        prev = self.file.position
-        current = self.file.position + 1
-        while current < self.file.size and self.file.data[prev] != "*" and self.file.data[current] != ")":
-            prev = current
-            current += 1
-        self.file.position = current + 1
-        return Token(Tag.COMMENTS)
+        prev = self.peek
+        self.readch()
+        while self.active:
+            if prev == '*' and self.peek == ')':
+                self.readch()
+                break
+            prev = self.peek
+            self.readch()
+        return Token(Tag.COMMENTS);
 
     #Main function that calls everything
     def scan(self):
         #Cancel all spaces to do the analysis correctly
         self.skipWhiteSpaces()
         #Lots of if's to check if the character is a reserved symbol one or not
-        if self.peek == "(":
-            if self.readch2("*"):
-                self.readch()
-                return readComments()
-            else:
-                return Token("(")
+        if self.peek == '(':
+            self.readch()
+            if self.peek =='*':
+                return self.readComments()
+            return Token('(')
 
         elif self.peek == "<":
             if self.readch2("="):
@@ -271,11 +277,8 @@ class Lexer:
                 return self.reserve2(":=")
             else:
                 return Token(":")
-
         elif self.peek == '"':
                 return self.readCharacterString()
-
-
 
         #Check if characters is a Digit
         #For Integers
@@ -305,17 +308,15 @@ class Lexer:
         if self.peek.isalpha():
             b = self.peek
             self.readch()
-            while self.peek.isalpha():
+            while self.peek.isalpha() or self.peek.isdigit():
                 b += self.peek
                 self.readch()
             s = str(b)
-            w = words.get(s)
-            if w != None:
-                return w
+            if self.isReserved(s):
+                return self.reserve2(s)
             w = Word(s, Tag.ID)
             reserve(w, self.words)
             return w
-
 
         #Ending
         tok = Token(self.peek)
@@ -323,10 +324,5 @@ class Lexer:
         return tok;
 
 
-
-def addToDic(dictionary, words):
-    for i in dictionary:
-        reserve(i, words)
-    pass
 def reserve(w, words):
     words[w.lexeme] = w
