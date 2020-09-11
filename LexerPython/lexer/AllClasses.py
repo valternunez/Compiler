@@ -193,8 +193,6 @@ class Lexer:
         self.peek = ""
         self.active = True
 
-
-
     #Basic validation of whether something is reserved or not(in dictionary or not)
     def isReserved (self, key):
         if key in self.words:
@@ -213,7 +211,7 @@ class Lexer:
         if self.peek != c:
             self.file.position += 1 #Si no vuelves a leer el mismo segundo caracter otra vez
             return False
-        self.file.position += 1
+        self.file.position += 1 #Si no vuelves a leer el mismo segundo caracter otra vez
         return True
 
     #Delete blank spaces
