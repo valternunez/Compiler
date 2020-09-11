@@ -1,5 +1,5 @@
 #Valter Nunez - A01206138
-
+import sys
 #Token Class
 class Token:
     def __init__(self, tag):
@@ -119,20 +119,20 @@ class InputFile:
         self.data = []
         self.position = 0
         self.size = 0
-        self.lineNumber = 1
         self.columnNumber = 1
+        self.lineNumber = 1
         aux = self.file.read()
         self.lines = 0
-        for ch in aux:
+        for x in aux:
             self.size += 1
-            if ch == "\n":
+            if x == "\n":
                 self.lines += 1
-            self.data.append(ch)
+            self.data.append(x)
 
 
     def getChar(self):
         self.position += 1
-        c = self.data[self.position ]
+        c = self.data[self.position]
         if c == "\n":
             self.columnNumber = 1
             self.lineNumber += 1
@@ -141,14 +141,18 @@ class InputFile:
         return c
 
     def peekChar(self):
+        if self.isEOF():
+            sys.exit()
         return self.data[self.position]
 
-
-    def isE0F(self):
-        if self.lineNumber == self.lines:
+    def isEOF(self):
+        if self.lineNumber == self.lines + 1:
             return True
         else:
             return False
+
+    def isEOL(self):
+        return isEOF() or peekChar() == "\n"
 
 class Lexer:
     def __init__(self, filename):
@@ -188,7 +192,7 @@ class Lexer:
         reserve(Word("or", Tag.OR), self.words)
         self.peek = ""
         self.active = True
-        pass
+
 
 
     #Basic validation of whether something is reserved or not(in dictionary or not)
