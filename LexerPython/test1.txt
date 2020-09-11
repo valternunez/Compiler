@@ -1,6 +1,14 @@
-Program Example1;
-(* This is a Pascal comment *)
+Program Example3;
+Var name, surname: String;
+
 Begin
-	Writeln("Hello World. Prepare to learn PASCAL!!");
-	Readln;
+writeln("Enter your name:");
+readln(name);
+writeln("Enter your surname:");
+readln(surname);
+writeln;
+writeln;
+(* This is a Pascal comment *)
+writeln("Your full name is: ",name," ",surname);
+readln;
 End.
