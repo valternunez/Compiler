@@ -211,7 +211,7 @@ class Lexer:
         if self.peek != c:
             self.file.position += 1 #Si no vuelves a leer el mismo segundo caracter otra vez
             return False
-        self.file.position += 1 #Si no vuelves a leer el mismo segundo caracter otra vez
+        self.file.position += 1 
         return True
 
     #Delete blank spaces

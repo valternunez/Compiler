@@ -1,14 +1,15 @@
-Program Example3;
-Var name, surname: String;
+
+Program Example2;
+Var
+	Num1, Num2, Sum : Integer;
 
 Begin
-writeln("Enter your name:");
-readln(name);
-writeln("Enter your surname:");
-readln(surname);
-writeln;
-writeln;
+Writeln("Input number 1:");
+Readln(Num1);
 (* This is a Pascal comment *)
-writeln("Your full name is: ",name," ",surname);
-readln;
+Writeln("Input number 2:");
+Readln(Num2);
+Sum := Num1 + Num2 + 123 + 3.1415;
+Writeln(Sum);
+Readln;
 End.
