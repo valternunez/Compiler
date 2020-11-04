@@ -68,6 +68,24 @@ class Parser:
             file.close()
             count = 0
             reduce = ''
+            for line in lines:
+                if count == action:
+                    reduce = line
+                    print(line)
+                count = count + 1
+            reduce  = reduce.strip()
+            reduce = reduce.split(' ')
+            print (reduce)
+            while reduce[-1] != '->':
+                self.pilaEstados.pop()
+                if reduce.pop() != self.pila.pop()
+                print("ERROR")
+                sys.exit()
+            reduce.pop()
+            self.pila.append(reduce.pop())
+            self.pilaEstados.append(int(self.tabla)) #no se
+
+
 
 
 
