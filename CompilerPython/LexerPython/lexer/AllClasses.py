@@ -211,7 +211,7 @@ class Lexer:
         if self.peek != c:
             self.file.position += 1 #Si no vuelves a leer el mismo segundo caracter otra vez
             return False
-        self.file.position += 1 
+        self.file.position += 1
         return True
 
     #Delete blank spaces
@@ -255,28 +255,28 @@ class Lexer:
             return Token('(')
 
         elif self.peek == "<":
-            if self.readch2("="):
-                return self.reserve2("<=")
+            if self.readch("="):
+                return le
             elif self.peek == ">":
-                return self.reserve2("<>")
+                return ne
             else:
                 return Token("<")
 
         elif self.peek == ">":
-            if self.readch2("="):
-                return self.reserve2(">=")
+            if self.readch("="):
+                return le
             else:
                 return Token(">")
 
         elif self.peek == "=":
-            if self.readch2("="):
-                return self.reserve2("==")
+            if self.readch("="):
+                return eq
             else:
                 return Token("=")
 
         elif self.peek == ":":
-            if self.readch2("="):
-                return self.reserve2(":=")
+            if self.readch("="):
+                return assign
             else:
                 return Token(":")
         elif self.peek == '"':
